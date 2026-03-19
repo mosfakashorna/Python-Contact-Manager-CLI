@@ -1,4 +1,19 @@
-contacts = {}
+import json
+
+FILE_NAME = "contacts.json"
+
+try:
+    with open(FILE_NAME, "r") as file:
+        contacts = json.load(file)
+
+except:
+    contacts = {}
+
+
+def save_contact():
+
+    with open(FILE_NAME, "w") as file:
+        json.dump(contacts, file)
 
 
 def add_contact():
@@ -9,8 +24,9 @@ def add_contact():
 
     contacts[name] = {"phone": phone_number,
                       "email": email_address, "city": city}
+    save_contact()
 
-    return "\nContact added."
+    return "\nContact added successfully ✔️"
 
 
 def view_contact():
@@ -51,24 +67,21 @@ def contact_information():
 
 
 def remove_contact():
-    view_contact()
-
     try:
-        num = int(input("\nEnter the contact serial number to remove: "))
+        print("\nAvailable contacts")
+        for name in contacts:
+            print(name)
 
-        remove_name = list(contacts.keys())[num - 1]
-
+        remove_name = input("\nEnter exact name to remove: ").title()
         contacts.pop(remove_name)
 
-        return f"\n{remove_name} has removed."
+        save_contact()
 
-    except ValueError:
+        return f"\n{remove_name} removed successfully ❌"
 
-        return "\nPlease enter the contact serial number to remove. "
+    except KeyError: 
+        return "Contact not found."
 
-    except IndexError:
-
-        return "\nNo contact found with this serial number."
 
 
 print("""
